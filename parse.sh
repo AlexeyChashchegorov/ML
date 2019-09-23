@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
 FILE_NAME="eth0.pcap"
+FILTER=""
 SCRIPT_NAME=$0
 
 usage() {
-	echo "${SCRIPT_NAME} [ -i | -input_pcap <pcap file> | default=${FILE_NAME}"
-	echo "           [ -h | --help ]"
+	echo "${SCRIPT_NAME}"
+	echo "[ -i | -input_pcap <pcap file> | default=${FILE_NAME}"
+	echo "[ -f | -input_filter <filter> | default=\"\" ]"
+	echo "[ -h | --help ]"
 }
 
 while [ "$1" != "" ]; do
@@ -13,6 +16,10 @@ while [ "$1" != "" ]; do
 		-i | --input_pcap )
 			shift
 			FILE_NAME=$1
+			;;
+		-f | -input_filter )
+			shift
+			FILTER=$1
 			;;
 		-h | --help )
 			usage
@@ -26,11 +33,10 @@ while [ "$1" != "" ]; do
 done
 ACCU=""	
 while read line; do
-	#echo $line
 	if [[ $line =~ length ]]; then
 		echo $ACCU
 		ACCU=$(echo $line | cut -d'.' -f1)":"
 	else
 		ACCU=${ACCU}$(echo $line | cut -d: -f2- | tr -s ' '| sed -e 's/ //g')
 	fi
-done < <(tcpdump -r ${FILE_NAME} -xx | tr -s ' ' )
+done < <(tcpdump -r ${FILE_NAME} -xx ${FILTER} | tr -s ' ' )
