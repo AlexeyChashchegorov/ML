@@ -4,11 +4,14 @@ IFACE_NAME="eth0"
 OUT_FILE="${IFACE_NAME}.pcap"
 TIME_SECONDS=10
 
+SCRIPT_NAME=$0
+
 usage() {
-	echo "./caprure.sh [ -i | --interface <interface_name> | default=${IFACE_NAME} ] "
-	echo "             [ -o | --out_file <file_name> | default=${OUT_FILE} ] "
-	echo "             [ -t | --time_seconds <capture time> | default=${TIME_SECONDS} ] "
-	echo "             [ -h | --help ] "
+	echo "${SCRIPT_NAME}"
+	echo "[ -i | --interface <interface_name> | default=${IFACE_NAME} ] "
+	echo "[ -o | --out_file <file_name> | default=${OUT_FILE} ] "
+	echo "[ -t | --time_seconds <capture time> | default=${TIME_SECONDS} ] "
+	echo "[ -h | --help ] "
 }
 
 while [ "$1" != "" ]; do

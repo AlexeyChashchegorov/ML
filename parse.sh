@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 FILE_NAME="eth0.pcap"
+SCRIPT_NAME=$0
 
 usage() {
-	echo "./parse.sh [ -i | -input_pcap <pcap file> | default=${FILE_NAME}"
+	echo "${SCRIPT_NAME} [ -i | -input_pcap <pcap file> | default=${FILE_NAME}"
 	echo "           [ -h | --help ]"
 }
 
