@@ -6,8 +6,8 @@ SCRIPT_NAME=$0
 
 usage() {
 	echo "${SCRIPT_NAME}"
-	echo "[ -i | -input_pcap <pcap file> | default=${FILE_NAME}"
-	echo "[ -f | -input_filter <filter> | default=\"\" ]"
+	echo "[ -i | --input_pcap <pcap file> | default=${FILE_NAME}"
+	echo "[ -f | --input_filter <filter> | default=\"\" ]"
 	echo "[ -h | --help ]"
 }
 
@@ -17,7 +17,7 @@ while [ "$1" != "" ]; do
 			shift
 			FILE_NAME=$1
 			;;
-		-f | -input_filter )
+		-f | --input_filter )
 			shift
 			FILTER=$1
 			;;
