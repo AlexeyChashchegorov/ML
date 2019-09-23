@@ -27,6 +27,7 @@ while [ "$1" != "" ]; do
 			;;
 		-h | --help )
 			usage
+			exit 0
 			;;
 		* )
 			usage
