@@ -19,6 +19,7 @@ while [ "$1" != "" ]; do
 		-i | --interface )
 			shift
 			IFACE_NAME=$1
+			OUT_FILE=${IFACE_NAME}.pcap
 			;;
 		-o | --out_file )
 			shift
