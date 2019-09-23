@@ -11,7 +11,12 @@ usage() {
 	echo "${SCRIPT_NAME}"
 	echo "[ -i | --input_pcap <pcap file> | default=${FILE_NAME}"
 	echo "[ -f | --input_filter <filter> | default=\"\" ]"
-	echo "[ --show_interval <start index, finish index> ]"
+	echo "[ --show_interval <start index, finish index> ] mutual"
+	echo "[ --show_ip_version ] mutual"
+	echo "[ --show_header_len ] mutual"
+	echo "[ --show_dscp_ecn ] mutual" #TODO separate fields
+	echo "[ --show_total_lenght ] mutual"
+	echo "[ --show_identification ] mutual"
 	echo "[ -h | --help ]"
 }
 
@@ -31,6 +36,26 @@ while [ "$1" != "" ]; do
 			shift
 			FINISH=$1
 			;;
+		--show_ip_version )
+			START=29
+			FINISH=29
+			;;
+		--show_header_len )
+			START=30
+			FINISH=30
+			;;
+		--show_dscp_ecn )
+			START=31
+			FINISH=32
+			;;
+		--show_total_length )
+			START=33
+			FINISH=36
+			;;
+		--show_identification )
+			START=37
+			FINISH=40
+			;;
 		-h | --help )
 			usage
 			exit 0
@@ -42,6 +67,7 @@ while [ "$1" != "" ]; do
 	shift
 done
 ACCU=""	
+TIME=""
 echo $START $FINISH
 while read line; do
 	if [[ $line =~ length ]]; then
@@ -49,8 +75,9 @@ while read line; do
 		if [ "$START" -ne "0" ] || [ "$FINISH" -ne "0" ]; then
 			DATA=$(echo ${ACCU} | cut -c${START}-${FINISH})	
 		fi
-		echo ${DATA}
-		ACCU=$(echo $line | cut -d'.' -f1)":"
+		echo ${TIME}${DATA}
+		TIME=$(echo $line | cut -d'.' -f1)":"
+		ACCU=""
 	else
 		ACCU=${ACCU}$(echo $line | cut -d: -f2- | tr -s ' '| sed -e 's/ //g')
 	fi
