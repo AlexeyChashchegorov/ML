@@ -2,12 +2,16 @@
 
 FILE_NAME="eth0.pcap"
 FILTER=""
+SHOW_OPTION=""
+START=0
+FINISH=0
 SCRIPT_NAME=$0
 
 usage() {
 	echo "${SCRIPT_NAME}"
 	echo "[ -i | --input_pcap <pcap file> | default=${FILE_NAME}"
 	echo "[ -f | --input_filter <filter> | default=\"\" ]"
+	echo "[ --show_interval <start index, finish index> ]"
 	echo "[ -h | --help ]"
 }
 
@@ -21,6 +25,12 @@ while [ "$1" != "" ]; do
 			shift
 			FILTER=$1
 			;;
+		--show_interval )
+			shift
+			START=$1
+			shift
+			FINISH=$1
+			;;
 		-h | --help )
 			usage
 			exit 0
@@ -32,9 +42,14 @@ while [ "$1" != "" ]; do
 	shift
 done
 ACCU=""	
+echo $START $FINISH
 while read line; do
 	if [[ $line =~ length ]]; then
-		echo $ACCU
+		DATA=${ACCU}
+		if [ "$START" -ne "0" ] || [ "$FINISH" -ne "0" ]; then
+			DATA=$(echo ${ACCU} | cut -c${START}-${FINISH})	
+		fi
+		echo ${DATA}
 		ACCU=$(echo $line | cut -d'.' -f1)":"
 	else
 		ACCU=${ACCU}$(echo $line | cut -d: -f2- | tr -s ' '| sed -e 's/ //g')
